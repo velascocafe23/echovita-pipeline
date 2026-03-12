@@ -2,13 +2,7 @@
 items.py — Modelo de datos del scraper
 
 Define la estructura de un obituario extraído de Echovita.
-Usamos scrapy.Item en lugar de dataclasses o dicts simples por tres razones:
-  1. Scrapy valida automáticamente que no se asignen campos no declarados
-  2. Las pipelines reciben un tipo conocido, no un dict genérico
-  3. Facilita serialización/deserialización nativa de Scrapy
-
-Si en el futuro se agrega una nueva fuente (ej: legacy.com), basta con
-crear un nuevo Item que herede de ObituaryItem o implemente la misma interfaz.
+Usamos scrapy.Item.
 """
 
 import scrapy
@@ -20,8 +14,7 @@ from datetime import datetime, timezone
 class ObituaryItem(scrapy.Item):
     """
     Representa un obituario scrapeado.
-    Todos los campos son opcionales en runtime — si no se pueden extraer,
-    la pipeline asignará None (mapeado a null en JSON).
+    el pipeline asignará None (mapeado a null en JSON).
     """
 
     # Identificación de la persona
@@ -30,7 +23,7 @@ class ObituaryItem(scrapy.Item):
     date_of_death: Optional[str] = scrapy.Field()   # ISO 8601: YYYY-MM-DD o null
     obituary_text: Optional[str] = scrapy.Field()   # Texto completo del obituario
 
-    # Metadatos de trazabilidad — buena práctica para pipelines de producción
+    # Metadatos de trazabilidad 
     source_url: str = scrapy.Field()      # URL de origen del obituario
     scraped_at: str = scrapy.Field()      # Timestamp de extracción (UTC ISO 8601)
 
@@ -39,12 +32,6 @@ class ObituaryItem(scrapy.Item):
 class ObituaryRecord:
     """
     Representación Python pura del obituario, desacoplada de Scrapy.
-    Se usa en la capa de consolidación (DuckDB) y en tests unitarios
-    sin necesidad de instanciar un Item de Scrapy.
-
-    Separar Item (capa scraping) de Record (capa de datos) es clave
-    para la extensibilidad: si mañana reemplazamos Scrapy por Playwright,
-    la capa de consolidación no cambia.
     """
     full_name: str
     date_of_birth: Optional[str] = None
