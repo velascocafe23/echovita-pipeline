@@ -1,0 +1,30 @@
+services:
+
+  # ── Dashboard ──────────────────────────────────────────────────────────────
+  # Streamlit app que visualiza los resultados del pipeline
+  # Lee el JSONL generado por el scraper local
+  # Disponible en http://localhost:8501
+  dashboard:
+    build: .
+    container_name: echovita_dashboard
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app                   # monta todo el proyecto
+    environment:
+      - PYTHONPATH=/app
+    restart: unless-stopped
+
+  # ── Scraper (opcional) ────────────────────────────────────────────────────
+  # Para correr el scraper manualmente dentro de Docker:
+  #   docker compose run --rm scraper
+  scraper:
+    build: .
+    container_name: echovita_scraper
+    profiles: ["scraper"]        # no corre con docker compose up por defecto
+    command: >
+      sh -c "cd /app/scraper && scrapy crawl echovita -s CLOSESPIDER_ITEMCOUNT=20"
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONPATH=/app/scraper
