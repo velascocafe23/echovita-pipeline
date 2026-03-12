@@ -1,23 +1,5 @@
 """
 middlewares.py — Middlewares del spider
-
-Dos middlewares que demuestran conocimiento real de scraping en producción:
-
-1. RotateUserAgentMiddleware
-   Rota el User-Agent en cada request para reducir la probabilidad de bloqueo.
-   En producción se complementa con proxies rotativos, pero el UA rotation
-   es la primera línea de defensa y la más simple de implementar.
-
-2. LoggingMiddleware
-   Loguea cada request/response con métricas útiles para debugging:
-   status code, tamaño de respuesta, tiempo de descarga.
-   En producción esto alimentaría un sistema de alertas.
-
-Nota sobre AutoThrottle:
-   AutoThrottle viene integrado en Scrapy y se activa en settings.py.
-   Ajusta dinámicamente el delay entre requests basándose en la latencia
-   del servidor — si el servidor está lento, Scrapy automáticamente
-   baja la frecuencia de requests para no sobrecargarlo.
 """
 
 import logging
@@ -30,7 +12,6 @@ from scrapy.http import Request, Response
 
 logger = logging.getLogger(__name__)
 
-# Pool de User-Agents reales de navegadores modernos
 # En producción: cargar desde un archivo externo o servicio de UA rotation
 USER_AGENTS = [
     # Chrome Windows
@@ -52,11 +33,7 @@ class RotateUserAgentMiddleware:
     """
     Rota el User-Agent en cada request usando un pool de navegadores reales.
 
-    Por qué es importante:
-    - Un UA fijo es la señal más obvia de un bot
-    - Rotar entre UAs reales imita el tráfico orgánico
-    - Se combina con DOWNLOAD_DELAY para mayor efectividad
-
+  
     Activación en settings.py:
         DOWNLOADER_MIDDLEWARES = {
             'echovita.middlewares.RotateUserAgentMiddleware': 400,
@@ -98,11 +75,7 @@ class LoggingMiddleware:
     """
     Loguea métricas de cada request/response para observabilidad.
 
-    En producción esto alimentaría:
-    - Dashboards de monitoreo (Grafana, DataDog)
-    - Alertas por tasa de errores alta
-    - Análisis de performance del spider
-
+   
     Activación en settings.py:
         DOWNLOADER_MIDDLEWARES = {
             'echovita.middlewares.LoggingMiddleware': 500,
