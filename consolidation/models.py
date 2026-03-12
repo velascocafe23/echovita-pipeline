@@ -1,14 +1,6 @@
 """
 models.py — Datos de ejemplo para la tabla SCD
 
-Replica exactamente la tabla del enunciado:
-person_id | name            | state | city    | valid_from | valid_to
-----------|-----------------|-------|---------|------------|----------
-1         | John Doe        | TX    | Houston | 2020-01-01 | 2022-07-25
-1         | John Doe        | TX    | Dallas  | 2022-07-25 | 2023-08-19
-1         | John Doe        | TX    | null    | 2023-08-19 | null
-2         | Richard Smith   | CA    | San...  | 2022-04-12 | null
-3         | Max Mustermann  | CA    | null    | 2000-07-22 | null
 """
 
 SCD_RECORDS = [
