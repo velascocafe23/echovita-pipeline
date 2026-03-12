@@ -7,12 +7,6 @@ Orquesta el pipeline completo en 4 tareas secuenciales:
   3. validate_jsonl: Verifica que el archivo JSONL fue generado
   4. consolidate   : Ejecuta la consolidación SCD con DuckDB
 
-Principios de diseño aplicados:
-  - Idempotente: cada tarea puede re-ejecutarse sin efectos secundarios
-  - Retries: 3 intentos con espacio de 5 minutos entre cada uno
-  - Logging: cada tarea loguea su resultado explícitamente
-  - Modular: cada tarea es independiente y testeable por separado
-  - Schedule: diario a las 8:00 AM UTC
 """
 
 import json
