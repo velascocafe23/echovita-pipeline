@@ -1,15 +1,6 @@
 """
 settings.py — Configuración central de Scrapy
 
-Aquí se controla el comportamiento del spider y el orden de ejecución
-de las pipelines. El orden numérico (1-1000) determina la secuencia:
-  - 100: Validación y limpieza de datos  (primero siempre)
-  - 200: Upload a S3 (mock)
-  - 300: Upload a GCS (mock)
-  - 400: Export local JSONL             (último, cuando ya pasó todo)
-
-Buena práctica: mantener este archivo como la única fuente de verdad
-para configuración. Nunca hardcodear settings dentro de las pipelines.
 """
 
 BOT_NAME = "echovita"
